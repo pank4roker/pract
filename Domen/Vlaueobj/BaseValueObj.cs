@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace Domen.Vlaueobj
 {
-    internal class BaseValueObj
+    public abstract class BaseValueObj
     {
+        public override bool Equals(object? obj)
+        {
+            // TODO: Проресерчить, как сравнивать (DeepCLone, DeepCompare)
+            return base.Equals(obj);
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
