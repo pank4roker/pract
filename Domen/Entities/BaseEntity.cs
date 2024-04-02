@@ -13,33 +13,25 @@ namespace Domen.Entities
     public abstract class BaseEntity
     {
         /// <summary>
-        /// TODO: Описать все сущности
+        /// ID польщователся
         /// </summary>
         public Guid Id { get; set; }
-
+        /// <summary>
+        /// Метод Equals для сравнения ID 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object? obj)
         {
-            // TODO: упростить код
-            if (obj == null)
-            {
-                return false;
-            }
-            
-            if(obj is not BaseEntity entity)
-            {
-                return false;
-            }
-            
-            if(Id != entity.Id) 
-            {
-                return false;
-            }
-            return true;
+            return obj is BaseEntity entity && Id == entity.Id;
         }
-
+        /// <summary>
+        /// Метод GHC, если Equals находит совпадение, то тут иет проверка
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public override int GetHashCode()
         {
-            // TODO: Проресёрчить, зачем переоределять при Equals
             throw new NotImplementedException();
         }
     }
