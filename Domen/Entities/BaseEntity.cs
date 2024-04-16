@@ -32,7 +32,7 @@ namespace Domen.Entities
         /// <exception cref="NotImplementedException"></exception>
         public override int GetHashCode()
         {
-            throw new NotImplementedException();
+            return Id.GetHashCode();
         }
     }
 }

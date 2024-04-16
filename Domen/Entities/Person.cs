@@ -1,4 +1,4 @@
-﻿using Domen.Vlaueobj;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
 using System.Net.Http.Headers;
+using Domen.Primitives;
+using Domen.ValueObject;
 
 namespace Domen.Entities
 {
@@ -19,9 +21,13 @@ namespace Domen.Entities
         /// Контструк тор для ФИО
         /// </summary>
         /// <param name="fullName"></param>
-        public Person(FullName fullName)
+        public Person(FullName fullName, DateTime birthDay, string phoneNumber, string telegram, Gender gender)
         {
             FullName = ValidateFullName(fullName);
+            BirthDay = ValidateBirthDay(birthDay);
+            PhoneNumber = ValidatePhoneNumber(phoneNumber);
+            Telegram = ValidateTelegram(telegram);
+            Gender = gender;
         }
         /// <summary>
         /// Св-во полного имени
@@ -43,6 +49,7 @@ namespace Domen.Entities
         /// Ник в тг
         /// </summary>
         public string Telegram { get; set; }
+        public Gender Gender { get; set; }
         /// <summary>
         /// Метод для проверки записи ФИО
         /// </summary>
@@ -61,7 +68,7 @@ namespace Domen.Entities
             {
                 if (fullName.MiddleName == string.Empty)
                 {
-                    throw new ArgumentException("Отчество не должно быть пустым, если оно ука");
+                    throw new ArgumentException(ValidationMessages.IsEmpty);
                 }
             }
             //регулярное выражение
@@ -85,7 +92,7 @@ namespace Domen.Entities
         {
             if (string.IsNullOrEmpty(telegram))
             {
-                throw new ArgumentException("Телеграм не может быть пустым.");
+                throw new ArgumentException(ValidationMessages.IsEmpty);
             }
             string pattern = @"^@";
             if(!Regex.IsMatch(telegram, pattern)) 
@@ -100,13 +107,10 @@ namespace Domen.Entities
         /// <param name="age"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        private int ValidateAge(int age)
+        private DateTime ValidateBirthDay(DateTime birthDay)
         {
-            if(Age<150)
-            {
-                throw new ArgumentException("Возраст должен быть меньше 150 лет.");
-            }
-            return Age;
+            if (birthDay.Year<DateTime.Today.Year - 150) throw new ArgumentException(ValidationMessages.IsRight);
+            return birthDay;
         }
         /// <summary>
         /// Метод для проверки телефона
@@ -118,7 +122,7 @@ namespace Domen.Entities
         {
             if (string.IsNullOrEmpty(phoneNumber))
             {
-                throw new ArgumentException("Телефон не может быть пустым.");
+                throw new ArgumentException(ValidationMessages.IsRight);
             }
             string pattern = @"^\+37377[5-9]\d{5}$";
             if (!Regex.IsMatch(phoneNumber, pattern))
